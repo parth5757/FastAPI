@@ -3,3 +3,5 @@ env/
 __pycache__/
 .pytest_cache/
 node_modules/
+pe.py
+.gitignore

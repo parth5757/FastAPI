@@ -36,6 +36,29 @@ async def get_stock_data(ticker: str):
         "difference_percentage": round(difference_percentage)
     }
 
+@app.get("/metrics/pe_ratio/{ticker}")  # Ticker as a path parameter
+async def get_stock_pe(ticker: str):  # Accept ticker from URL path
+    try:
+        # Fetch stock data using yfinance
+        stock = yf.Ticker(f"{ticker}.NS")  # Appending '.NS' for NSE stocks
+
+        # Get stock info
+        stock_info = stock.info
+
+        # Handle empty data case
+        if not stock_info:
+            return {"error": "No data found for this symbol"}
+
+        # Extract PE ratio, handle missing cases
+        pe_ratio = stock_info.get("trailingPE", "N/A")
+
+        # Return results
+        return {"ticker": ticker, "pe_ratio": pe_ratio}
+    
+    except Exception as e:
+        # handle exception
+        return{"error": str(e)}
+    
 # @app.get("/stock_symbol/")
 # async def get_stock_symbol():
 #     # Load the CSV file containing NSE stock symbols
